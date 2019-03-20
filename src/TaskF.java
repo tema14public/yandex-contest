@@ -1,5 +1,35 @@
 /*
 
+public class TaskF {
+    public static void main(String[] args) throws Exception {
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        int arrCnt = Integer.parseInt(r.readLine());
+
+        int[] res = new int[101];
+
+        for (int i = 0; i < arrCnt ; i++) {
+
+            int[] arr = Arrays.stream(r.readLine().split(" "))
+                    .mapToInt(Integer::parseInt).toArray();
+            if(arr.length>1)
+            for (int j = 1; j <arr.length ; j++) {
+                res[arr[j]] +=1;
+            }
+        System.gc();
+
+        }
+
+        r.close();
+
+        for (int i = 0; i <= 100 ; i++) {
+            for (int j = 0; j < res[i] ; j++) {
+                System.out.println(i);
+            }
+        }
+
+    }
+}
+
 F. Слияние k сортированных списков
 
 Язык	Ограничение времени	Ограничение памяти	Ввод	Вывод
@@ -35,45 +65,36 @@ Kotlin	1 секунда	20Mb
 
  */
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.File;
+import java.util.Scanner;
 
 public class TaskF {
     public static void main(String[] args) throws Exception {
-        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-        int arrCnt = Integer.parseInt(r.readLine());
-        int fullSize = 0;
 
-        int[][] arr = new int[arrCnt][];
-        for (int i = 0; i < arrCnt ; i++) {
-            int[] intArray = Arrays.stream(r.readLine().split(" "))
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
-            if(intArray[0]>0){
-                fullSize+=intArray[0];
-                arr[i] = new int[intArray[0]];
-                System.arraycopy(intArray,1,arr[i],0,intArray[0]);
+        int[] res = new int[101];
+        Scanner scanner = new Scanner(new File("input.txt"));
+        int rows = scanner.nextInt();
+        int inRow = 0;
+        int n = 0;
+
+        while (rows>0){
+            if(scanner.hasNextInt())
+                inRow = scanner.nextInt();
+            while (inRow>0){
+                n = scanner.nextInt();
+                res[n] +=1;
+                inRow--;
+            }
+            rows--;
+        }
+        scanner.close();
+
+
+        for (int i = 0; i <= 100 ; i++) {
+            for (int j = 0; j < res[i] ; j++) {
+                System.out.println(i);
             }
         }
-
-        int[] res = new int[fullSize];
-        int point = 0;
-
-        for(int[] a : arr){
-            if(a!=null) {
-                System.arraycopy(a, 0, res, point, a.length);
-                point += a.length;
-            }
-        }
-
-        Arrays.sort(res);
-
-        StringBuilder sb = new StringBuilder();
-        Arrays.stream(res).forEach(i->sb.append(i+" "));
-        System.out.println(sb.toString().trim());
-
-        r.close();
 
     }
 }
