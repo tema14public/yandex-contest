@@ -65,36 +65,50 @@ Kotlin	1 секунда	20Mb
 
  */
 
-import java.io.File;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.stream.IntStream;
 
 public class TaskF {
+
+    public static StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws Exception {
 
-        int[] res = new int[101];
-        Scanner scanner = new Scanner(new File("input.txt"));
-        int rows = scanner.nextInt();
-        int inRow = 0;
-        int n = 0;
+        byte[] res = new byte[101];
 
-        while (rows>0){
-            if(scanner.hasNextInt())
-                inRow = scanner.nextInt();
-            while (inRow>0){
-                n = scanner.nextInt();
-                res[n] +=1;
-                inRow--;
-            }
-            rows--;
-        }
-        scanner.close();
+        try(FileInputStream fis = new FileInputStream("input.txt")){
+            short rows = next(fis);
+            short inRow = 0;
+            byte n = 0;
 
+            while (rows>0){
 
-        for (int i = 0; i <= 100 ; i++) {
-            for (int j = 0; j < res[i] ; j++) {
-                System.out.println(i);
+                inRow = next(fis);
+                while (inRow>0){
+                    n = next(fis);
+                    res[n] +=1;
+                    inRow--;
+                }
+                rows--;
             }
         }
 
+        IntStream.range(0,101).forEach(i->IntStream.range(0,res[i]).forEach(j-> System.out.println(i)));
+
+    }
+    public static byte next(FileInputStream fis) throws IOException {
+        sb.delete(0,sb.length());
+        char c;
+        while (fis.available()>0){
+            c = (char) fis.read();
+            while (!Character.isWhitespace(c)){
+                sb.append(c);
+                if(fis.available()<=0) break;
+                c = (char) fis.read();
+            }
+            return Byte.parseByte(sb.toString());
+        }
+        return -1;
     }
 }
