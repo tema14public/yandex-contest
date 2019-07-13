@@ -1,5 +1,35 @@
 /*
 
+public class TaskF {
+    public static void main(String[] args) throws Exception {
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        int arrCnt = Integer.parseInt(r.readLine());
+
+        int[] res = new int[101];
+
+        for (int i = 0; i < arrCnt ; i++) {
+
+            int[] arr = Arrays.stream(r.readLine().split(" "))
+                    .mapToInt(Integer::parseInt).toArray();
+            if(arr.length>1)
+            for (int j = 1; j <arr.length ; j++) {
+                res[arr[j]] +=1;
+            }
+        System.gc();
+
+        }
+
+        r.close();
+
+        for (int i = 0; i <= 100 ; i++) {
+            for (int j = 0; j < res[i] ; j++) {
+                System.out.println(i);
+            }
+        }
+
+    }
+}
+
 F. Слияние k сортированных списков
 
 Язык	Ограничение времени	Ограничение памяти	Ввод	Вывод
@@ -35,45 +65,50 @@ Kotlin	1 секунда	20Mb
 
  */
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.stream.IntStream;
 
 public class TaskF {
+
+    public static StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws Exception {
-        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-        int arrCnt = Integer.parseInt(r.readLine());
-        int fullSize = 0;
 
-        int[][] arr = new int[arrCnt][];
-        for (int i = 0; i < arrCnt ; i++) {
-            int[] intArray = Arrays.stream(r.readLine().split(" "))
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
-            if(intArray[0]>0){
-                fullSize+=intArray[0];
-                arr[i] = new int[intArray[0]];
-                System.arraycopy(intArray,1,arr[i],0,intArray[0]);
+        byte[] res = new byte[101];
+
+        try(FileInputStream fis = new FileInputStream("input.txt")){
+            short rows = next(fis);
+            short inRow = 0;
+            byte n = 0;
+
+            while (rows>0){
+
+                inRow = next(fis);
+                while (inRow>0){
+                    n = next(fis);
+                    res[n] +=1;
+                    inRow--;
+                }
+                rows--;
             }
         }
 
-        int[] res = new int[fullSize];
-        int point = 0;
+        IntStream.range(0,101).forEach(i->IntStream.range(0,res[i]).forEach(j-> System.out.println(i)));
 
-        for(int[] a : arr){
-            if(a!=null) {
-                System.arraycopy(a, 0, res, point, a.length);
-                point += a.length;
+    }
+    public static byte next(FileInputStream fis) throws IOException {
+        sb.delete(0,sb.length());
+        char c;
+        while (fis.available()>0){
+            c = (char) fis.read();
+            while (!Character.isWhitespace(c)){
+                sb.append(c);
+                if(fis.available()<=0) break;
+                c = (char) fis.read();
             }
+            return Byte.parseByte(sb.toString());
         }
-
-        Arrays.sort(res);
-
-        StringBuilder sb = new StringBuilder();
-        Arrays.stream(res).forEach(i->sb.append(i+" "));
-        System.out.println(sb.toString().trim());
-
-        r.close();
-
+        return -1;
     }
 }
